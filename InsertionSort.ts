@@ -1,18 +1,20 @@
 function selectionSort(arr: number[]) {
     for (let i=0; i < arr.length; i++) {
-        console.log(arr[i])
+        let swap = false;
         let min = arr[i]
         let idx = i
-        for (let j=1+i; j<arr.length-i; j++) {
+        for (let j=1+i; j<arr.length; j++) {
             if (arr[j] < min) {
                 min = arr[j]
                 idx = j
+                swap= true
             }
         }
-        [arr[i], arr[idx]] = [arr[idx], arr[i]]
+        if (!swap) break;
+        [arr[i], arr[idx]] = [arr[idx], arr[i]];
     }
     console.log(arr)
     return arr
 }
 
-selectionSort([3,2,1,-1,4,6,7])
+selectionSort([3,1,2,4,4,6,-3,0]);
