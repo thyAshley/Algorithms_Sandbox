@@ -1,5 +1,5 @@
 // frequencyCounter
-function anagram(word: string, word2: string) {
+function anagram(word:string, word2: string) {
     if (word.length !== word2.length) return false;
     let frequencyCounter: {[key: string]: number} = {}
     let frequencyCounter2: {[key: string]: number} = {}

@@ -1,29 +1,16 @@
-function selectionSort(arr: number[], mode: string ='asc') {
-    for (let i=0; i < arr.length; i++) {
-        let swap = false;
-        let min = arr[i]
-        let idx = i
-        for (let j=1+i; j<arr.length; j++) {
-            if (mode === 'asc') {
-                if (arr[j] < min) {
-                    min = arr[j]
-                    idx = j
-                    swap= true
-                }
-            } else {
-                if (arr[j] > min) {
-                    min = arr[j]
-                    idx = j
-                    swap= true
-                }
-            }
-
+function insertionSort(arr: number[]) {
+    if (arr.length < 2) return arr
+    for (let i = 1; i < arr.length; i++) {
+        let current = arr[i];
+        for (var j = i-1; j>= 0 && arr[j] > current; j--) {
+            arr[j+1] = arr[j]
         }
-        if (!swap) break;
-        [arr[i], arr[idx]] = [arr[idx], arr[i]];
+        console.log('comparing', arr[j], current,j);
+        arr[j+1] = current
+        console.log(arr)
     }
-    console.log(arr)
     return arr
 }
 
-selectionSort([3,1,2,4,4,6,-3,0], 'desc');
+const result = insertionSort([1,2,7,6,3,4,5]);
+console.log(result)
