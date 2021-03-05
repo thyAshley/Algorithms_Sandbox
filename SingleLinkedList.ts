@@ -97,12 +97,59 @@ class SingleLinkedList {
         node.val = val;
         return this;
     }
+
+    remove(index: number):SingleLinkedList | null{
+        if (index >= this.length || index < 0) return null;
+        if (index === 0) return this.shift();
+        if (index === this.length -1) return this.pop();
+        let node = this.get(index-1) as _Node;
+        let nextNode = node!.next;
+        node.next = nextNode!.next;
+        nextNode = null;
+        this.length--;
+        return this;
+    }
+
+    insert(val: any, index: number): SingleLinkedList | null {
+        if (index < 0 || index > this.length) return null;
+        if (index == this.length) {
+            this.push(val);
+            return this;
+        }
+        if (index === 0) {
+            this.unshift(val);
+            return this;
+        }
+        let previous = this.get(index - 1);
+        const newNode = new _Node(val);
+        newNode.next = previous!.next;
+        previous!.next = newNode;
+        this.length++;
+        return this;
+    }
+
+    reverse(): SingleLinkedList {
+        let tail = this.tail;
+        let current = this.head;
+        let previous = null;
+        let next = null;
+        let count = 0;
+        while (count < this.length) {
+            next = current!.next;
+            current!.next = previous;
+            previous = current;
+            current = next;
+            count++;
+        }
+        return this;
+    }
 }
     
 
 let list = new SingleLinkedList();
 list.push("123");
-list.push("1234");
-list.push("1235");
 list.push("bye");
-console.log(list.set(1,5));
+list.push("byee");
+list.push("byeee");
+list.reverse();
+console.log(list)
