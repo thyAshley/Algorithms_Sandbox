@@ -30,10 +30,49 @@ class SingleLinkedList{
         this.length += 1;
         return this;
     }
+    shift(): SingleLinkedList {
+        let nextNode = this.head?.next;
+        if (nextNode) {
+            this.head = nextNode;
+            this.length--;
+            return this;
+        }
+        this.head = null;
+        this.tail = null;
+        this.length--;
+        return this;
+    }
+
+    pop(): SingleLinkedList {
+        let current = this.head;
+        if (this.length === 1) {
+            this.head = null;
+            this.tail = null;
+            this.length = 0;
+            return this;
+        }
+        while(current) {
+            if (current.next == this.tail) {
+                this.tail = current;
+                current.next = null;
+                this.length--;
+                break;
+                
+            }
+            current = current.next;
+
+        }
+        return this;
+    }
 }
 
 let list = new SingleLinkedList();
 list.push("Hey");
 list.push("There");
 list.push("Test");
-console.log(list.head);
+list.pop();
+console.log(list);
+list.shift();
+console.log(list);
+list.shift();
+console.log(list);
