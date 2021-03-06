@@ -95,6 +95,35 @@ class DoubleLinkedList {
     return node!;
   }
 
+  insert(index: number, val: number) {
+    if (index === 0 && index <= this.length) {
+      this.unshift(val);
+    }
+    if (index === this.length) {
+      this.push(val);
+    } else {
+      let newNode = new _Node(val);
+      let node = this.get(index - 1);
+      if (node) {
+        const nextNode = node.next;
+        newNode.next = nextNode;
+        newNode.previous = node;
+        nextNode!.previous = newNode;
+        node.next = newNode;
+      }
+    }
+    this.length++;
+    return this;
+  }
+
+  set(index: number, val: number) {
+    let node = this.get(index);
+    if (node) {
+      node.val = val;
+    }
+    return this;
+  }
+
   unshift(val: number): DoubleLinkedList {
     let newNode = new _Node(val);
     if (!this.head) {
@@ -117,6 +146,7 @@ class DoubleLinkedList {
 const dlist = new DoubleLinkedList();
 dlist.push(2);
 dlist.push(4);
-dlist.push(1);
-dlist.push(5);
-DoubleLinkedList.print(dlist.get(-1));
+dlist.insert(0, 100);
+dlist.insert(6, 1003);
+DoubleLinkedList.print(dlist);
+DoubleLinkedList.print(dlist.head);
