@@ -1,155 +1,180 @@
 class _Node {
-    val: any;
-    next: _Node | null;
-    constructor(value: any) {
-        this.val = value;
-        this.next = null;
-    }
+  val: any;
+  next: _Node | null;
+  previous: _Node | null;
+
+  constructor(val: any) {
+    this.val = val;
+    this.next = null;
+    this.previous = null;
+  }
 }
 
-class SingleLinkedList {
-    head: _Node | null;
-    tail: _Node | null;
-    length: number;
-    constructor() {
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
+const getCircularReplacer = () => {
+  const seen = new WeakSet();
+  return (key: any, value: any) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
     }
+    return value;
+  };
+};
 
-    push(val: any): SingleLinkedList {
-        let node = new _Node(val);
-        if (!this.tail) {
-            this.head = node;
-            this.tail = this.head;
-        } else {
-            this.tail.next = node;
-            this.tail = node;
-        }
+class DoubleLinkedList {
+  head: _Node | null;
+  tail: _Node | null;
+  length: number;
 
-        this.length += 1;
-        return this;
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.length = 0;
+  }
+
+  pop(): DoubleLinkedList {
+    if (this.length === 0) return this;
+    if (this.length === 1) {
+      this.tail = null;
+      this.head = null;
+      this.length--;
+      return this;
     }
+    this.tail = this.tail!.previous;
+    this.tail!.next = null;
+    this.length--;
+    return this;
+  }
 
-    shift(): SingleLinkedList | null {
-        if (!this.head) return null;
-        var currentHead = this.head;
-        this.head = currentHead.next;
-        this.length--;
-        if (this.length == 0) {
-            this.tail = null;
-        }
-        return this;
+  push(val: any): DoubleLinkedList {
+    const newNode = new _Node(val);
+    if (this.length === 0) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      this.tail!.next = newNode;
+      newNode.previous = this.tail;
+      this.tail = newNode;
     }
+    this.length++;
+    return this;
+  }
 
-    unshift(val: any): SingleLinkedList {
-        if (!this.head) {
-            this.push(val);
-            return this;
-        }
-        let node = new _Node(val);
-        let currentHead = this.head;
-        this.head = node;
-        this.head.next = currentHead
+  shift(): DoubleLinkedList {
+    if (!this.head) return this;
+    if (this.length === 1) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      let oldHead = this.head;
+      this.head = this.head.next;
+      this.head!.previous = null;
+      oldHead.next = null;
+    }
+    this.length--;
+    return this;
+  }
+
+  get(index: number): _Node | null {
+    if (index >= this.length || !this.head || index < 0) return null;
+    let node: _Node;
+    if (index < this.length / 2) {
+      node = this.head!;
+
+      for (let i = 0; i < index; i++) {
+        node = node!.next!;
+      }
+    } else {
+      node = this.tail!;
+      for (let i = this.length - 1; i > index; i--) {
+        node = node!.previous!;
+      }
+    }
+    return node!;
+  }
+
+  insert(index: number, val: number) {
+    if (index < 0 || index > this.length) return null;
+    if (index === 0 && index <= this.length) {
+      this.unshift(val);
+    }
+    if (index === this.length) {
+      this.push(val);
+    } else {
+      let newNode = new _Node(val);
+      let node = this.get(index - 1);
+      if (node) {
+        const nextNode = node.next;
+        newNode.next = nextNode;
+        newNode.previous = node;
+        nextNode!.previous = newNode;
+        node.next = newNode;
+
         this.length++;
-
-        return this;
+      }
     }
+    return this;
+  }
 
-    pop(): SingleLinkedList {
-        let current = this.head;
-        if (this.length === 1) {
-            this.head = null;
-            this.tail = null;
-            this.length = 0;
-            return this;
-        }
-        while (current) {
-            if (current.next == this.tail) {
-                this.tail = current;
-                current.next = null;
-                this.length--;
-                break;
-
-            }
-            current = current.next;
-
-        }
-        return this;
+  set(index: number, val: number) {
+    let node = this.get(index);
+    if (node) {
+      node.val = val;
     }
+    return this;
+  }
 
-    get(val: number): (_Node | null) {
-        if (this.length < val || val < 0) return null;
-        if (val === 1) return this.head!.next;
-        if (val === 0) return this.head;
-        let count = 0;
-        let node = this.head;
-        while (count !== val) {
-            node = node!.next;
-            count++;
-        }
-        return node;
+  unshift(val: number): DoubleLinkedList {
+    let newNode = new _Node(val);
+    if (!this.head) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      this.head!.previous = newNode;
+      newNode.next = this.head;
+      this.head = newNode;
+      this.length++;
     }
+    return this;
+  }
 
-    set(val: any, index: number): SingleLinkedList | null {
-        const node = this.get(index);
-        if (!node) return null;
-        node.val = val;
-        return this;
-    }
+  remove(index: number) {
+    if (index < 0 || index >= this.length) return null;
+    if (index === 0) return this.shift();
+    if (index === this.length - 1) return this.pop();
+    let node = this.get(index);
+    let prevNode = node!.previous;
+    let nextNode = node!.next;
+    prevNode!.next = nextNode;
+    nextNode!.previous = prevNode;
+    node!.next = null;
+    node!.previous = null;
+    this.length--;
+    return this;
+  }
 
-    remove(index: number):SingleLinkedList | null{
-        if (index >= this.length || index < 0) return null;
-        if (index === 0) return this.shift();
-        if (index === this.length -1) return this.pop();
-        let node = this.get(index-1) as _Node;
-        let nextNode = node!.next;
-        node.next = nextNode!.next;
-        nextNode = null;
-        this.length--;
-        return this;
+  reverse() {
+    let current = this.head;
+    while (current) {
+      let next = current!.next;
+      current.next = current.previous;
+      current.previous = next;
+      current = next;
     }
+    [this.head, this.tail] = [this.tail, this.head];
+    return this;
+  }
 
-    insert(val: any, index: number): SingleLinkedList | null {
-        if (index < 0 || index > this.length) return null;
-        if (index == this.length) {
-            this.push(val);
-            return this;
-        }
-        if (index === 0) {
-            this.unshift(val);
-            return this;
-        }
-        let previous = this.get(index - 1);
-        const newNode = new _Node(val);
-        newNode.next = previous!.next;
-        previous!.next = newNode;
-        this.length++;
-        return this;
-    }
-
-    reverse(): SingleLinkedList {
-        let tail = this.tail;
-        let current = this.head;
-        let previous = null;
-        let next = null;
-        let count = 0;
-        while (count < this.length) {
-            next = current!.next;
-            current!.next = previous;
-            previous = current;
-            current = next;
-            count++;
-        }
-        return this;
-    }
+  static print(dlist: _Node | DoubleLinkedList | null) {
+    console.log(JSON.parse(JSON.stringify(dlist, getCircularReplacer())));
+  }
 }
-    
 
-let list = new SingleLinkedList();
-list.push("123");
-list.push("bye");
-list.push("byee");
-list.push("byeee");
-list.reverse();
-console.log(list)
+const dlist = new DoubleLinkedList();
+dlist.push(2);
+dlist.push(4);
+dlist.push(5);
+dlist.reverse();
+DoubleLinkedList.print(dlist.head);

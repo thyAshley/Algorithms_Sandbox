@@ -96,6 +96,7 @@ class DoubleLinkedList {
   }
 
   insert(index: number, val: number) {
+    if (index < 0 || index > this.length) return null;
     if (index === 0 && index <= this.length) {
       this.unshift(val);
     }
@@ -110,9 +111,10 @@ class DoubleLinkedList {
         newNode.previous = node;
         nextNode!.previous = newNode;
         node.next = newNode;
+
+        this.length++;
       }
     }
-    this.length++;
     return this;
   }
 
@@ -138,6 +140,33 @@ class DoubleLinkedList {
     return this;
   }
 
+  remove(index: number) {
+    if (index < 0 || index >= this.length) return null;
+    if (index === 0) return this.shift();
+    if (index === this.length - 1) return this.pop();
+    let node = this.get(index);
+    let prevNode = node!.previous;
+    let nextNode = node!.next;
+    prevNode!.next = nextNode;
+    nextNode!.previous = prevNode;
+    node!.next = null;
+    node!.previous = null;
+    this.length--;
+    return this;
+  }
+
+  reverse() {
+    let current = this.head;
+    while (current) {
+      let next = current!.next;
+      current.next = current.previous;
+      current.previous = next;
+      current = next;
+    }
+    [this.head, this.tail] = [this.tail, this.head];
+    return this;
+  }
+
   static print(dlist: _Node | DoubleLinkedList | null) {
     console.log(JSON.parse(JSON.stringify(dlist, getCircularReplacer())));
   }
@@ -146,7 +175,6 @@ class DoubleLinkedList {
 const dlist = new DoubleLinkedList();
 dlist.push(2);
 dlist.push(4);
-dlist.insert(0, 100);
-dlist.insert(6, 1003);
-DoubleLinkedList.print(dlist);
+dlist.push(5);
+dlist.reverse();
 DoubleLinkedList.print(dlist.head);
