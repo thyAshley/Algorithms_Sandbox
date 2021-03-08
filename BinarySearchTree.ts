@@ -107,6 +107,36 @@ class BST {
       if (node.left) Traverse(node.left);
       if (node.right) Traverse(node.right);
     }
+    Traverse(node);
+    return visited;
+  }
+
+  DFS_PostOrder_Recursive() {
+    const visited: number[] = [];
+    let node = this.root;
+    if (!node) return false;
+
+    function Traverse(node: _Node) {
+      if (node.left) Traverse(node.left);
+      if (node.right) Traverse(node.right);
+      visited.push(node.val);
+    }
+
+    Traverse(node);
+
+    return visited;
+  }
+
+  DFS_InOrder_Recursive() {
+    const visited: number[] = [];
+    let node = this.root;
+    if (!node) return false;
+
+    function Traverse(node: _Node) {
+      if (node.left) Traverse(node.left);
+      visited.push(node.val);
+      if (node.right) Traverse(node.right);
+    }
 
     Traverse(node);
 
@@ -124,3 +154,5 @@ tree.insert(8);
 console.log(tree.BFS());
 console.log(tree.DFS_FirstOrder());
 console.log(tree.DFS_FirstOder_Recurvsive());
+console.log(tree.DFS_PostOrder_Recursive());
+console.log(tree.DFS_InOrder_Recursive());
