@@ -100,13 +100,16 @@ class BST {
   DFS_FirstOder_Recurvsive() {
     const visited: number[] = [];
     let node = this.root;
-    if (!node) return null;
-    function traverse(node: _Node) {
+    if (!node) return false;
+
+    function Traverse(node: _Node) {
       visited.push(node.val);
-      if (node.left) traverse(node.left);
-      if (node.right) traverse(node.right);
+      if (node.left) Traverse(node.left);
+      if (node.right) Traverse(node.right);
     }
-    traverse(node);
+
+    Traverse(node);
+
     return visited;
   }
 }
