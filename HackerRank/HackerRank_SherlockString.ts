@@ -6,7 +6,6 @@ function SherlockString(s: string) {
   for (let char of s) {
     frequencyCounter[char] = frequencyCounter[char] + 1 || 1;
   }
-  console.log(frequencyCounter);
   let first = null;
   let removed = null;
   for (let key in frequencyCounter) {
