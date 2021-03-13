@@ -62,6 +62,50 @@ class Graph {
     return result;
   }
 
+  BFS_Recursive(start: any) {
+    const visited: { [key: string]: boolean } = {};
+    const result = [start];
+    const adjacencyList = this.adjacencyList;
+    const queue: any[] = [];
+    visited[start] = true;
+    (function BFS(vertex: any) {
+      queue.shift();
+      if (vertex.length === 0) return;
+      adjacencyList[vertex].forEach((connection) => {
+        if (!visited[connection]) {
+          visited[connection] = true;
+          queue.push(connection);
+          result.push(connection);
+        }
+      });
+      queue.forEach((vertex) => {
+        return BFS(vertex);
+      });
+    })(start);
+
+    console.log(result);
+  }
+
+  BFS_Iterative(start: any) {
+    const queue = [start];
+    const result = [];
+    const visited: { [key: string]: boolean } = {};
+    visited[start] = true;
+
+    while (start.length) {
+      let element = queue.shift();
+      result.push(element);
+      this.adjacencyList[element].forEach((connection) => {
+        if (!visited[connection]) {
+          visited[connection] = true;
+          queue.push(connection);
+        }
+      });
+    }
+    console.log(result);
+    return result;
+  }
+
   DFS_Recursive(vertex: any) {
     const visited: { [key: string]: boolean } = {};
     const result = [];
@@ -97,4 +141,4 @@ graph.addEdge("C", "E");
 graph.addEdge("D", "E");
 graph.addEdge("D", "F");
 graph.addEdge("E", "F");
-graph.DFS_Iterative("A");
+graph.BFS_Recursive("A");
