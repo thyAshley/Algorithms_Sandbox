@@ -16,6 +16,6 @@ function permutationWithReptition(arr: number[], length: number) {
 }
 
 const digits = [1,2,3];
-const resultLength = 3;
+const resultLength = 6;
 
 console.log(permutationWithReptition(digits, resultLength));
