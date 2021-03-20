@@ -10,7 +10,6 @@ function ChangeMaker(availableCoin: number[], target: number) {
     for (let coin of availableCoin) {
         if (coin > remainder) continue;
         if (remainder === 0) break;
-        console.log('running..')
         let newRemainder = remainder % coin;
         change[coin] = (remainder - newRemainder) / coin
         remainder = newRemainder
