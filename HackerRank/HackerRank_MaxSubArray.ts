@@ -1,3 +1,5 @@
+// https://www.hackerrank.com/challenges/max-array-sum/problem
+
 function maxSubarray(arr: number[]) {
     let table = [];
     table[0] = Math.max(arr[0], 0);
