@@ -6,7 +6,6 @@ class Car {
     constructor(isSedan: boolean, seats: number) {
       this.isSedan = isSedan;
       this.seats = seats;
-      this.mileage = 0;
     }
   
     public getIsSedan() {
