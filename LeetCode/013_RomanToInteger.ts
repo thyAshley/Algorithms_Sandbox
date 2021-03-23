@@ -1,39 +1,24 @@
 function romanToInt(s: string): number {
-    let hashmap: {[key: string]: number} = {
-        'M': 1000,
-        'CM': 900,
-        'D': 500,
-        'CD': 400,
-        'C': 100,
-        'XC': 90,
-        'L': 50,
-        'XL': 40,
-        'X': 10,
-        'IX': 9,
-        'V': 5,
-        'IV': 4,
-        'I': 1,
+  let hashmap: {[key: string]: number} = {
+      'M': 1000,
+      'D': 500,
+      'C': 100,
+      'L': 50,
+      'X': 10,
+      'V': 5,
+      'I': 1,
+  }
+  
+  let answer = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (hashmap[s[i]] < hashmap[s[i+1]]) {
+      answer -= hashmap[s[i]];
+    } else {
+      answer += hashmap[s[i]];
     }
-    
-    let left = 0;
-    let right = 1;
-    let result = 0;
 
-    while (left < s.length) {
-        let combination = s[left] + s[right];
-        if (hashmap[combination]) {
-          result += hashmap[combination]
-          left += 2;
-          right += 2;
-        } else {
-          result += hashmap[s[left]];
-          left += 1;
-          right += 1;
-        }
-
-    }
-    console.log(result)
-    return result;
+  }
+  return answer;
 };
 
 romanToInt('MCMXCIV');
