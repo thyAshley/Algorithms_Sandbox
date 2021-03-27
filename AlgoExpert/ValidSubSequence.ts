@@ -1,4 +1,5 @@
 function validSubSequence(array: number[], target: number[]) {
+  if (target.length > array.length) return false;
   let j = 0;
   for (
     let i = 0;
