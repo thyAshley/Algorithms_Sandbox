@@ -45,39 +45,32 @@ class BinarySearchTree {
   }
 }
 
-function MinHeightBST(arr: number[]) {
-  let bst = new BinarySearchTree();
-  function buildBST(arr: number[]) {
-    if (arr.length === 1) return bst.add(arr[0]);
-    if (arr.length === 0) return;
-    let mid = Math.floor((arr.length - 1) / 2);
-    bst.add(arr[mid]);
-    let left = arr.slice(0, mid);
-    let right = arr.slice(mid + 1);
-    buildBST(left);
-    buildBST(right);
-  }
-  buildBST(arr);
-  return bst;
-}
-
 function InvertBST(bst: BinarySearchTree) {
   let queue: BSTNode[] = [bst.root];
   while (queue.length) {
     let node = queue.shift();
     if (node === null) continue;
+    if (node.left || node.right) {
+      [node.left, node.right] = [node.right, node.left];
+    }
     if (node.left) {
       queue.push(node.left);
     }
     if (node.right) {
       queue.push(node.right);
     }
-    if (node.left || node.right) {
-      [node.left, node.right] = [node.right, node.left];
-    }
   }
+  console.log(bst);
 }
 
-let arr = [1, 2, 5, 7, 10, 13, 14, 15, 22];
-const bst = MinHeightBST(arr);
-InvertBST(bst);
+let invertbst = new BinarySearchTree();
+invertbst.root = new BSTNode(1);
+invertbst.root.left = new BSTNode(2);
+invertbst.root.right = new BSTNode(3);
+invertbst.root.left.left = new BSTNode(4);
+invertbst.root.left.right = new BSTNode(5);
+invertbst.root.right.left = new BSTNode(6);
+invertbst.root.right.right = new BSTNode(7);
+invertbst.root.left.left.left = new BSTNode(8);
+invertbst.root.left.left.right = new BSTNode(9);
+InvertBST(invertbst);
